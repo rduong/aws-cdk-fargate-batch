@@ -13,3 +13,6 @@ phases:
       - docker tag $tag:latest $ecr:$tag
       - docker push $ecr
 
+artifacts:
+  files:
+    - imageDetail.json

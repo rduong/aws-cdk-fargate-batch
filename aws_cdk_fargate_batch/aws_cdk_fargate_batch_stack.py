@@ -39,7 +39,7 @@ class AwsCdkFargateBatchStack(core.Stack):
                 'ecr': aws_codebuild.BuildEnvironmentVariable(
                     value=ecr_repository.repository_uri),
                 'tag': aws_codebuild.BuildEnvironmentVariable(
-                    value='latest')
+                    value='sample-batch')
             },
             description='Pipeline for CodeBuild',
             timeout=core.Duration.minutes(60),
