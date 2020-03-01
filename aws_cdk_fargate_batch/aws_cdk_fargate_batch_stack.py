@@ -30,7 +30,7 @@ class AwsCdkFargateBatchStack(core.Stack):
             project_name='continuous-delivery',
             # f"{props['namespace']}-Docker-Build",
             build_spec=aws_codebuild.BuildSpec.from_source_filename(
-                filename='./batch/docker_build_buildspec.yml'),
+                filename='batch/docker_build_buildspec.yml'),
             environment=aws_codebuild.BuildEnvironment(
                 privileged=True,
             ),
