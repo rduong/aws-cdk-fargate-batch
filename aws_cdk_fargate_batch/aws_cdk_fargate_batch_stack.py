@@ -5,7 +5,7 @@ from aws_cdk import aws_ecs
 from aws_cdk import aws_logs
 from aws_cdk import aws_events
 from aws_cdk import aws_events_targets
-
+from aws_cdk import aws_codebuild
 
 class AwsCdkFargateBatchStack(core.Stack):
 
@@ -21,6 +21,29 @@ class AwsCdkFargateBatchStack(core.Stack):
             repository_name='sample_repository'
         )
         
+        # ====================================
+        # Build Docker Image
+        # ====================================
+        # codebuild project meant to run in pipeline
+        cb_docker_build = aws_codebuild.PipelineProject(
+            self, "DockerBuild",
+            project_name='continuous-delivery',
+            # f"{props['namespace']}-Docker-Build",
+            build_spec=aws_codebuild.BuildSpec.from_source_filename(
+                filename='./batch/docker_build_buildspec.yml'),
+            environment=aws_codebuild.BuildEnvironment(
+                privileged=True,
+            ),
+            # pass the ecr repo uri into the codebuild project so codebuild knows where to push
+            environment_variables={
+                'ecr': aws_codebuild.BuildEnvironmentVariable(
+                    value=ecr_repository.repository_uri),
+                'tag': aws_codebuild.BuildEnvironmentVariable(
+                    value='latest')
+            },
+            description='Pipeline for CodeBuild',
+            timeout=core.Duration.minutes(60),
+        )        
         # ====================================
         # VPC
         # ====================================
