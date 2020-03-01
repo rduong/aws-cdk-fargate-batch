@@ -26,7 +26,7 @@ class ContinuousDeliveryStack(core.Stack):
         source_output = aws_codepipeline.Artifact('source_output')
 
         # Change to your setting.
-        owner = 'joe-king-sh'
+        owner = 'rduong'
         repo = 'aws-cdk-fargate-batch'
         branch = 'master'
         oauth_token = get_parameters('GITHUB_OAUTH_TOKEN')
@@ -99,7 +99,7 @@ def get_parameters(param_key):
     """
     Get parameter encrypted from parameter store.
     """
-    ssm = boto3.client('ssm', region_name='ap-northeast-1')
+    ssm = boto3.client('ssm', region_name='us-east-1')
     response = ssm.get_parameters(
         Names=[
             param_key,
