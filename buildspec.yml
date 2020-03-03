@@ -1,27 +1,18 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      python: 3.7
+  pre_build:
     commands:
-      - |
-        echo Instaling packages started..
-
-        python3 -m pip install pipenv
-        npm install -g aws-cdk
-        pipenv install
-
+      - echo logging into docker
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      - |
-        echo Launching virtual environments started..
-        export VENV_HOME_DIR=$(pipenv --venv)
-        . $VENV_HOME_DIR/bin/activate
-
-        echo Translating into cloudformation started..
-        cdk synth aws-cdk-fargate-batch
+      - echo Entered the post_build phase...
+      - echo Build completed on `date`
+      - docker build -t ${tag}:latest batch/
+      - docker tag $tag:latest $ecr:$tag
+      - docker push $ecr
 
 artifacts:
-  base-directory: cdk.out
-  files: '**/*'
+  files:
+    - imageDetail.json

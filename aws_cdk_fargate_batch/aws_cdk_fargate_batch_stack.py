@@ -18,7 +18,8 @@ class AwsCdkFargateBatchStack(core.Stack):
         ecr_repository = aws_ecr.Repository(
             self,
             id='ecr_repository',
-            repository_name='sample_repository'
+            repository_name='sample_repository',
+            removal_policy=core.RemovalPolicy.DESTROY
         )
         
         # ====================================
